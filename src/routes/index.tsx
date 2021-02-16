@@ -6,6 +6,7 @@ import CreateAppointment from '@pages/CreateAppointment';
 import Dashboard from '@pages/Dashboard';
 import ForgotPassword from '@pages/ForgotPassword';
 import Profile from '@pages/Profile';
+import Providers from '@pages/Providers';
 import ResetPassword from '@pages/ResetPassword';
 import SignIn from '@pages/SignIn';
 import SignUp from '@pages/SignUp';
@@ -33,6 +34,7 @@ const Routes: React.FC = () => {
         component={AppointmentCreated}
         isPrivate
       />
+      <Route path="/providers" component={Providers} isPrivate />
     </Switch>
   );
 };
