@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
+import AppointmentCreated from '@pages/AppointmentCreated';
+import CreateAppointment from '@pages/CreateAppointment';
 import Dashboard from '@pages/Dashboard';
 import ForgotPassword from '@pages/ForgotPassword';
 import Profile from '@pages/Profile';
@@ -20,6 +22,17 @@ const Routes: React.FC = () => {
 
       <Route path="/dashboard" component={Dashboard} isPrivate />
       <Route path="/profile" component={Profile} isPrivate />
+
+      <Route
+        path="/create-appointment"
+        component={CreateAppointment}
+        isPrivate
+      />
+      <Route
+        path="/appointment-created"
+        component={AppointmentCreated}
+        isPrivate
+      />
     </Switch>
   );
 };
