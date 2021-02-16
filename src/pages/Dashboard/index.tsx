@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import DayPicker, { DayModifiers } from 'react-day-picker';
-import { FiClock, FiPower, FiUser } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { FiClock, FiUser } from 'react-icons/fi';
 
 import { isToday, format, parseISO, isAfter } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -11,13 +10,10 @@ import api from '@services/api';
 
 import { useAuth } from '@hooks/auth';
 
-import logo from '@assets/logo.svg';
+import Header from '@components/Header';
 
 import {
   Container,
-  HeaderContent,
-  Header,
-  Profile,
   Content,
   Schedule,
   NextAppointment,
@@ -50,8 +46,7 @@ const Dashboard: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const {
-    signOut,
-    user: { id, name, avatarUrl }
+    user: { id }
   } = useAuth();
 
   const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
@@ -136,29 +131,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <img src={logo} alt="GoBarber" />
-          <Profile>
-            {avatarUrl ? (
-              <img src={avatarUrl} alt={name} />
-            ) : (
-              <FiUser size={30} />
-            )}
-            <div>
-              <span>Bem-vindo,</span>
-              <Link to="/profile">
-                <strong>{name}</strong>
-              </Link>
-            </div>
-          </Profile>
-
-          <button type="button" onClick={signOut}>
-            <FiPower size={20} />
-          </button>
-        </HeaderContent>
-      </Header>
-
+      <Header />
       <Content>
         <Schedule>
           <h1>Horários agendados</h1>
