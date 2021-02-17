@@ -9,10 +9,13 @@ export const HeaderContent = styled.div`
   align-items: center;
   display: flex;
   margin: 0 auto;
-  max-width: 1120px;
+  max-width: 1100px;
+  padding: 0 10px;
 
-  > img {
-    height: 80px;
+  a {
+    > img {
+      height: 80px;
+    }
   }
 
   button {
@@ -48,6 +51,37 @@ export const Profile = styled.div`
     }
 
     a {
+      color: #ff9000;
+      text-decoration: none;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  button {
+    margin-left: 18px;
+  }
+`;
+
+export const Menu = styled.ul`
+  display: flex;
+  flex: 1;
+  list-style-type: none;
+  margin-left: 36px;
+
+  li {
+    padding: 0 10px;
+
+    span {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    a,
+    span {
       color: #ff9000;
       text-decoration: none;
 

@@ -1,23 +1,41 @@
 import React from 'react';
-import { FiPower, FiUser } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { FiArrowLeft, FiPower, FiUser } from 'react-icons/fi';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@hooks/auth';
 
 import logo from '@assets/logo.svg';
 
-import { Container, HeaderContent, Profile } from './styles';
+import { Container, HeaderContent, Profile, Menu } from './styles';
 
 const Header: React.FC = () => {
   const {
     signOut,
     user: { name, avatarUrl }
   } = useAuth();
+  const history = useHistory();
+  const location = useLocation();
 
   return (
     <Container>
       <HeaderContent>
-        <img src={logo} alt="GoBarber" />
+        <Link to="/">
+          <img src={logo} alt="GoBarber" />
+        </Link>
+
+        <Menu>
+          {location.pathname !== '/dashboard' && (
+            <li>
+              <span onClick={() => history.goBack()} aria-hidden="true">
+                <FiArrowLeft size={24} />
+              </span>
+            </li>
+          )}
+          <li>
+            <Link to="/providers">Barbeiros</Link>
+          </li>
+        </Menu>
+
         <Profile>
           {avatarUrl ? (
             <img src={avatarUrl} alt={name} />
@@ -30,11 +48,11 @@ const Header: React.FC = () => {
               <strong>{name}</strong>
             </Link>
           </div>
-        </Profile>
 
-        <button type="button" onClick={signOut}>
-          <FiPower size={20} />
-        </button>
+          <button type="button" onClick={signOut}>
+            <FiPower size={20} />
+          </button>
+        </Profile>
       </HeaderContent>
     </Container>
   );
