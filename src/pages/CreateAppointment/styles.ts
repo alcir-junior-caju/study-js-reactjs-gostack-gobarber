@@ -12,13 +12,37 @@ interface ListProps {
 
 export const Container = styled.div``;
 
-export const ProviderList = styled.nav`
+export const Carroussel = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 0 20px;
+
+  > svg {
+    background: #3e3b47;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 28px;
+    padding: 5px;
+    width: 28px;
+
+    &:hover {
+      background: ${shade(0.4, '#3e3b47')};
+    }
+  }
+`;
+
+export const ProviderList = styled.div`
+  align-items: center;
   display: flex;
   flex-direction: row;
   margin: 32px auto;
-  max-width: 1100px;
-  overflow: hidden;
-  padding: 0 20px;
+  max-width: 944px;
+  overflow: scroll;
+  scroll-behavior: smooth;
 `;
 
 export const List = styled(Link)<ListProps>`
@@ -38,7 +62,8 @@ export const List = styled(Link)<ListProps>`
   }
 
   &:hover {
-    background: ${shade(0.4, '#3e3b47')};
+    background: ${({ selectedprovider }) =>
+      selectedprovider ? shade(0.2, '#f99000') : shade(0.4, '#3e3b47')};
   }
 
   img {
