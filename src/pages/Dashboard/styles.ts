@@ -9,7 +9,8 @@ export const Container = styled.div``;
 export const Content = styled.main`
   display: flex;
   margin: 64px auto;
-  max-width: 1120px;
+  max-width: 1100px;
+  padding: 0 20px;
 `;
 
 export const Schedule = styled.div`
