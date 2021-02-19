@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 interface ContainerProps {
   type?: 'success' | 'error' | 'info';
-  hasDescription: number;
+  hasdescription: number;
 }
 
 const containerTypeVariations = {
@@ -61,8 +61,8 @@ export const Container = styled(animated.div)<ContainerProps>`
     top: 16px;
   }
 
-  ${({ hasDescription }) =>
-    !hasDescription &&
+  ${({ hasdescription }) =>
+    !hasdescription &&
     css`
       align-items: center;
 
