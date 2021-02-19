@@ -48,7 +48,7 @@ export const ProviderList = styled.div`
   flex-direction: row;
   margin: 32px auto;
   max-width: 944px;
-  overflow: scroll;
+  overflow: hidden;
   scroll-behavior: smooth;
 `;
 
