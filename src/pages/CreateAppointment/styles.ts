@@ -1,13 +1,20 @@
 import { Link } from 'react-router-dom';
 
 import { shade } from 'polished';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import Button from '@components/Button';
 
 import ArrowLeftIcon from '@assets/ArrowLeftIcon.svg';
 import ArrowRightIcon from '@assets/ArrowRightIcon.svg';
 
 interface ListProps {
   selectedprovider: number;
+}
+
+interface AvailableProps {
+  available: number;
+  selected: number;
 }
 
 export const Container = styled.div``;
@@ -202,4 +209,62 @@ export const Calendar = styled.aside`
       background: ${shade(0.2, '#3e3b47')};
     }
   }
+`;
+
+export const Section = styled.section`
+  & + section {
+    margin-top: 48px;
+  }
+
+  > strong {
+    border-bottom: 1px solid #3e3b47;
+    color: #999591;
+    display: block;
+    font-size: 20px;
+    line-height: 26px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+  }
+`;
+
+export const ContainerHours = styled.div`
+  align-items: space-between;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const HourAvailable = styled.div<AvailableProps>`
+  background: #3e3b47;
+  border-radius: 5px;
+  color: #f4ede8;
+  opacity: ${({ available }) => (available ? 1 : 0.3)};
+  padding: 10px;
+  text-align: center;
+
+  & + div {
+    margin-left: 16px;
+  }
+
+  ${({ available }) =>
+    available &&
+    css`
+      cursor: pointer;
+
+      &:hover {
+        background: #ff9000;
+        color: #232129;
+      }
+    `}
+
+  ${({ available, selected }) =>
+    available &&
+    selected &&
+    css`
+      background: #ff9000;
+      color: #232129;
+    `}
+`;
+
+export const ScheduleButton = styled(Button)`
+  margin-top: 55px;
 `;

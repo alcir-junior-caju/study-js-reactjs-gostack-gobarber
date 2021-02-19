@@ -1,8 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import DayPicker, { DayModifiers } from 'react-day-picker';
 import { FiArrowLeft, FiArrowRight, FiUser } from 'react-icons/fi';
-import { useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
+
+import { format } from 'date-fns';
 
 import api from '@services/api';
+
+import { useToast } from '@hooks/toast';
+import 'react-day-picker/lib/style.css';
 
 import Header from '@components/Header';
 
@@ -13,7 +25,11 @@ import {
   Schedule,
   ProviderList,
   List,
-  Carroussel
+  Carroussel,
+  Section,
+  HourAvailable,
+  ContainerHours,
+  ScheduleButton
 } from './styles';
 
 interface Provider {
@@ -26,11 +42,32 @@ interface RepositoryParams {
   providerId: string;
 }
 
+interface MonthAvailability {
+  day: number;
+  available: boolean;
+}
+
+interface DayAvailability {
+  hour: number;
+  available: boolean;
+}
+
 const CreateAppointment: React.FC = () => {
+  const { addToast } = useToast();
+  const history = useHistory();
   const providerListRef = useRef<HTMLDivElement>(null);
   const { params } = useRouteMatch<RepositoryParams>();
   const [providers, setProviders] = useState<Provider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState(params.providerId);
+  const [currentMonth, setCurrentMounth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedHour, setSelectedHour] = useState(0);
+  const [monthAvailability, setMonthAvailability] = useState<
+    MonthAvailability[]
+  >([]);
+  const [dayAvailability, setDayMonthAvailability] = useState<
+    DayAvailability[]
+  >([]);
 
   useEffect(() => {
     api.get('providers').then(response => setProviders(response.data));
@@ -46,6 +83,106 @@ const CreateAppointment: React.FC = () => {
     }
   }, []);
 
+  const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
+    if (modifiers.available && !modifiers.disabled) setSelectedDate(day);
+  }, []);
+
+  const handleMonthChange = useCallback((month: Date) => {
+    setCurrentMounth(month);
+  }, []);
+
+  useEffect(() => {
+    api
+      .get(`providers/${selectedProvider}/month-availability`, {
+        params: {
+          year: currentMonth.getFullYear(),
+          month: currentMonth.getMonth() + 1
+        }
+      })
+      .then(response => setMonthAvailability(response.data));
+  }, [currentMonth, selectedProvider]);
+
+  useEffect(() => {
+    api
+      .get(`providers/${selectedProvider}/day-availability`, {
+        params: {
+          year: selectedDate.getFullYear(),
+          month: selectedDate.getMonth() + 1,
+          day: selectedDate.getDate()
+        }
+      })
+      .then(response => setDayMonthAvailability(response.data));
+  }, [selectedDate, selectedProvider]);
+
+  const disableDays = useMemo(() => {
+    const dates = monthAvailability
+      .filter(monthDay => monthDay.available === false)
+      .map(monthDay => {
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth();
+
+        return new Date(year, month, monthDay.day);
+      });
+
+    return dates;
+  }, [currentMonth, monthAvailability]);
+
+  const morningDayAvailability = useMemo(() => {
+    return dayAvailability
+      .filter(({ hour }) => hour < 12)
+      .map(({ hour, available }) => {
+        return {
+          hour,
+          available,
+          hourFormatted: format(new Date().setHours(hour), 'HH:00')
+        };
+      });
+  }, [dayAvailability]);
+
+  const afternoonDayAvailability = useMemo(() => {
+    return dayAvailability
+      .filter(({ hour }) => hour >= 12)
+      .map(({ hour, available }) => {
+        return {
+          hour,
+          available,
+          hourFormatted: format(new Date().setHours(hour), 'HH:00')
+        };
+      });
+  }, [dayAvailability]);
+
+  const handleSelectHour = useCallback((hour: number) => {
+    setSelectedHour(hour);
+  }, []);
+
+  const handleCreateAppointment = useCallback(async () => {
+    try {
+      const date = new Date(selectedDate);
+
+      date.setHours(selectedHour);
+      date.setMinutes(0);
+
+      await api.post('appointments', {
+        providerId: selectedProvider,
+        date
+      });
+
+      history.push('/');
+
+      addToast({
+        type: 'success',
+        title: 'Agendamento criado',
+        description: 'Você criou um novo agendamento com sucesso.'
+      });
+    } catch (err) {
+      addToast({
+        type: 'error',
+        title: 'Erro ao criar agendamento',
+        description: 'Ocorreu algum erro ao tentar criar um agendamento.'
+      });
+    }
+  }, [addToast, selectedProvider, selectedHour, selectedDate]);
+
   return (
     <Container>
       <Header />
@@ -55,13 +192,13 @@ const CreateAppointment: React.FC = () => {
 
         <ProviderList ref={providerListRef}>
           {providers.map(({ id, name, avatarUrl }) => {
-            const checkProvider = selectedProvider === id;
+            const isChecked = selectedProvider === id;
 
             return (
               <List
                 to={`/create-appointment/${id}`}
                 key={id}
-                selectedprovider={Number(!!checkProvider)}
+                selectedprovider={Number(!!isChecked)}
                 onClick={() => handleSelectProvider(id)}
               >
                 {avatarUrl ? (
@@ -80,8 +217,93 @@ const CreateAppointment: React.FC = () => {
       </Carroussel>
 
       <Content>
-        <Schedule>0</Schedule>
-        <Calendar>0</Calendar>
+        <Schedule>
+          <Section>
+            <strong>Manhã</strong>
+
+            {morningDayAvailability.length === 0 && (
+              <p>Nenhum agendamento neste período!</p>
+            )}
+
+            <ContainerHours>
+              {morningDayAvailability.map(
+                ({ hour, hourFormatted, available }) => {
+                  const isSelected = selectedHour === hour;
+
+                  return (
+                    <HourAvailable
+                      key={hour}
+                      available={Number(!!available)}
+                      onClick={() => handleSelectHour(hour)}
+                      selected={Number(!!isSelected)}
+                    >
+                      {hourFormatted}
+                    </HourAvailable>
+                  );
+                }
+              )}
+            </ContainerHours>
+          </Section>
+
+          <Section>
+            <strong>Tarde</strong>
+
+            {afternoonDayAvailability.length === 0 && (
+              <p>Nenhum agendamento neste período!</p>
+            )}
+
+            <ContainerHours>
+              {afternoonDayAvailability.map(
+                ({ hour, hourFormatted, available }) => {
+                  const isSelected = selectedHour === hour;
+
+                  return (
+                    <HourAvailable
+                      key={hour}
+                      available={Number(!!available)}
+                      onClick={() => handleSelectHour(hour)}
+                      selected={Number(!!isSelected)}
+                    >
+                      {hourFormatted}
+                    </HourAvailable>
+                  );
+                }
+              )}
+            </ContainerHours>
+          </Section>
+
+          <ScheduleButton onClick={() => handleCreateAppointment()}>
+            Agendar
+          </ScheduleButton>
+        </Schedule>
+
+        <Calendar>
+          <DayPicker
+            weekdaysShort={['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']}
+            fromMonth={new Date()}
+            disabledDays={[{ daysOfWeek: [0, 6] }, ...disableDays]}
+            modifiers={{
+              available: { daysOfWeek: [1, 2, 3, 4, 5] }
+            }}
+            onDayClick={handleDateChange}
+            selectedDays={selectedDate}
+            onMonthChange={handleMonthChange}
+            months={[
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro'
+            ]}
+          />
+        </Calendar>
       </Content>
     </Container>
   );
