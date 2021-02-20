@@ -8,7 +8,7 @@ import React, {
 import { FiArrowLeft, FiArrowRight, FiUser } from 'react-icons/fi';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 
-import { isToday, format, parseISO, isAfter } from 'date-fns';
+import { isToday, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import api from '@services/api';
