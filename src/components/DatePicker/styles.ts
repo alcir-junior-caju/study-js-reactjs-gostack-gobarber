@@ -56,6 +56,11 @@ export const Container = styled.div`
       border-spacing: 8px;
       margin: 0;
       padding: 0 10px 10px;
+
+      @media only screen and (max-width: 600px) {
+        padding: 0;
+        border-spacing: 2px;
+      }
     }
 
     &-Caption {

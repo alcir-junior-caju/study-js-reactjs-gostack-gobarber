@@ -5,9 +5,6 @@ import styled, { css } from 'styled-components';
 
 import Button from '@components/Button';
 
-import ArrowLeftIcon from '@assets/ArrowLeftIcon.svg';
-import ArrowRightIcon from '@assets/ArrowRightIcon.svg';
-
 interface ListProps {
   selectedprovider: number;
 }
@@ -27,6 +24,10 @@ export const Carroussel = styled.div`
   margin: 0 auto;
   max-width: 1100px;
   padding: 0 20px;
+
+  @media only screen and (max-width: 600px) {
+    padding: 0 10px;
+  }
 
   > svg {
     background: #3e3b47;
@@ -50,6 +51,10 @@ export const ProviderList = styled.div`
   max-width: 944px;
   overflow: hidden;
   scroll-behavior: smooth;
+
+  @media only screen and (max-width: 600px) {
+    width: 265px;
+  }
 `;
 
 export const List = styled(Link)<ListProps>`
@@ -96,16 +101,28 @@ export const List = styled(Link)<ListProps>`
   }
 `;
 
-export const Content = styled.div`
-  display: flex;
+export const Content = styled.main`
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  grid-template-columns: 3fr 1fr;
   margin: 64px auto;
   max-width: 1100px;
   padding: 0 20px;
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+    margin: 0 auto;
+  }
 `;
 
 export const Schedule = styled.div`
   flex: 1;
-  margin-right: 120px;
+  order: 1;
+
+  @media only screen and (max-width: 600px) {
+    order: 2;
+  }
 
   p {
     align-items: center;
@@ -131,7 +148,12 @@ export const Schedule = styled.div`
 `;
 
 export const Calendar = styled.aside`
-  width: 380px;
+  order: 2;
+
+  @media only screen and (max-width: 600px) {
+    order: 1;
+    margin-top: 25px;
+  }
 `;
 
 export const Section = styled.section`
@@ -154,6 +176,10 @@ export const ContainerHours = styled.div`
   align-items: space-between;
   display: flex;
   flex-direction: row;
+
+  @media only screen and (max-width: 600px) {
+    display: inherit;
+  }
 `;
 
 export const HourAvailable = styled.div<AvailableProps>`
@@ -164,8 +190,16 @@ export const HourAvailable = styled.div<AvailableProps>`
   padding: 10px;
   text-align: center;
 
+  @media only screen and (max-width: 600px) {
+    margin-bottom: 6px;
+  }
+
   & + div {
     margin-left: 16px;
+
+    @media only screen and (max-width: 600px) {
+      margin-left: 0;
+    }
   }
 
   ${({ available }) =>

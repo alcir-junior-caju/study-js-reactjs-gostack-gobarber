@@ -19,6 +19,11 @@ export const Content = styled.main`
   margin: 64px auto;
   max-width: 1100px;
   padding: 0 10px;
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+    margin: 0 auto;
+  }
 `;
 
 export const List = styled(Link)`

@@ -3,15 +3,27 @@ import styled from 'styled-components';
 export const Container = styled.div``;
 
 export const Content = styled.main`
-  display: flex;
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  grid-template-columns: 3fr 1fr;
   margin: 64px auto;
   max-width: 1100px;
   padding: 0 20px;
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+    margin: 0 auto;
+  }
 `;
 
 export const Schedule = styled.div`
   flex: 1;
-  margin-right: 120px;
+  order: 1;
+
+  @media only screen and (max-width: 600px) {
+    order: 2;
+  }
 
   p {
     align-items: center;
@@ -148,5 +160,10 @@ export const Appointment = styled.div`
 `;
 
 export const Calendar = styled.aside`
-  width: 380px;
+  order: 2;
+
+  @media only screen and (max-width: 600px) {
+    order: 1;
+    margin-top: 25px;
+  }
 `;

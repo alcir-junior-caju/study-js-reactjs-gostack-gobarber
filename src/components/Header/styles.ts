@@ -12,6 +12,10 @@ export const HeaderContent = styled.div`
   max-width: 1100px;
   padding: 0 10px;
 
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+
   a {
     > img {
       height: 80px;
@@ -33,6 +37,16 @@ export const Profile = styled.div`
   align-items: center;
   display: flex;
   margin-left: 80px;
+
+  @media only screen and (max-width: 600px) {
+    margin: 0;
+    width: 100%;
+
+    button {
+      flex: 1;
+      text-align: right;
+    }
+  }
 
   img {
     border-radius: 50%;
@@ -70,6 +84,10 @@ export const Menu = styled.ul`
   flex: 1;
   list-style-type: none;
   margin-left: 36px;
+
+  @media only screen and (max-width: 600px) {
+    margin: 25px 0;
+  }
 
   li {
     padding: 0 10px;
