@@ -40,18 +40,28 @@
 <p align="center">
     <img alt="Tela 05" src="_images/profile.png" width="75%" style="margin: 15px 0" />
 </p>
-<p align="center" style="width:50%;float:left;">
-    <img alt="Tela 06" src="_images/dashboard-mobile.png" style="margin: 15px 0" />
-</p>
-<p align="center" style="width:50%;float:left;">
-    <img alt="Tela 07" src="_images/create-appointment-mobile.png" style="margin: 15px 0" />
-</p>
-<p align="center" style="width:50%;float:left;">
-    <img alt="Tela 08" src="_images/profile-mobile.png" style="margin: 15px 0" />
-</p>
-<p align="center" style="width:50%;float:left;">
-    <img alt="Tela 09" src="_images/providers-mobile.png" style="margin: 15px 0" />
-</p>
+
+<table>
+  <tr>
+    <td style="vertical-align:top">
+      <img alt="Tela 06" src="_images/dashboard-mobile.png" />
+    </td>
+    <td style="vertical-align:top">
+      <img alt="Tela 07" src="_images/create-appointment-mobile.png" />
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td style="vertical-align:top">
+      <img alt="Tela 08" src="_images/profile-mobile.png" />
+    </td>
+    <td style="vertical-align:top">
+      <img alt="Tela 09" src="_images/providers-mobile.png" />
+    </td>
+  </tr>
+</table>
 
 ---
 
