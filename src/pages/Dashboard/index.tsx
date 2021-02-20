@@ -39,7 +39,7 @@ interface Appointment {
 }
 
 const Dashboard: React.FC = () => {
-  const { selectedDate, currentMonth } = useDatePicker();
+  const { selectedDate, setSelectedDate, currentMonth } = useDatePicker();
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailability[]
   >([]);
@@ -48,6 +48,10 @@ const Dashboard: React.FC = () => {
   const {
     user: { id }
   } = useAuth();
+
+  useEffect(() => {
+    setSelectedDate(new Date());
+  }, [setSelectedDate]);
 
   useEffect(() => {
     api

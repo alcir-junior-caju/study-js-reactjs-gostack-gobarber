@@ -57,7 +57,7 @@ interface DayAvailability {
 
 const CreateAppointment: React.FC = () => {
   const { addToast } = useToast();
-  const { selectedDate, currentMonth } = useDatePicker();
+  const { selectedDate, setSelectedDate, currentMonth } = useDatePicker();
   const history = useHistory();
   const providerListRef = useRef<HTMLDivElement>(null);
   const { params } = useRouteMatch<RepositoryParams>();
@@ -70,6 +70,10 @@ const CreateAppointment: React.FC = () => {
   const [dayAvailability, setDayMonthAvailability] = useState<
     DayAvailability[]
   >([]);
+
+  useEffect(() => {
+    setSelectedDate(new Date());
+  }, [setSelectedDate]);
 
   useEffect(() => {
     api.get('providers').then(response => setProviders(response.data));
