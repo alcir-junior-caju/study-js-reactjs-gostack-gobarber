@@ -5,17 +5,20 @@ import React, {
   useRef,
   useState
 } from 'react';
-import DayPicker, { DayModifiers } from 'react-day-picker';
 import { FiArrowLeft, FiArrowRight, FiUser } from 'react-icons/fi';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 
-import { format } from 'date-fns';
+import { isToday, format, parseISO, isAfter } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import api from '@services/api';
 
+import { useDatePicker } from '@hooks/datePicker';
 import { useToast } from '@hooks/toast';
+
 import 'react-day-picker/lib/style.css';
 
+import DatePicker from '@components/DatePicker';
 import Header from '@components/Header';
 
 import {
@@ -54,13 +57,12 @@ interface DayAvailability {
 
 const CreateAppointment: React.FC = () => {
   const { addToast } = useToast();
+  const { selectedDate, currentMonth } = useDatePicker();
   const history = useHistory();
   const providerListRef = useRef<HTMLDivElement>(null);
   const { params } = useRouteMatch<RepositoryParams>();
   const [providers, setProviders] = useState<Provider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState(params.providerId);
-  const [currentMonth, setCurrentMounth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedHour, setSelectedHour] = useState(0);
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailability[]
@@ -81,14 +83,6 @@ const CreateAppointment: React.FC = () => {
     if (providerListRef.current) {
       providerListRef.current.scrollLeft += scrollOffset;
     }
-  }, []);
-
-  const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
-    if (modifiers.available && !modifiers.disabled) setSelectedDate(day);
-  }, []);
-
-  const handleMonthChange = useCallback((month: Date) => {
-    setCurrentMounth(month);
   }, []);
 
   useEffect(() => {
@@ -114,18 +108,15 @@ const CreateAppointment: React.FC = () => {
       .then(response => setDayMonthAvailability(response.data));
   }, [selectedDate, selectedProvider]);
 
-  const disableDays = useMemo(() => {
-    const dates = monthAvailability
-      .filter(monthDay => monthDay.available === false)
-      .map(monthDay => {
-        const year = currentMonth.getFullYear();
-        const month = currentMonth.getMonth();
+  const selectedDateAsText = useMemo(() => {
+    return format(selectedDate, "'Dia' dd 'de' MMMM", {
+      locale: ptBR
+    });
+  }, [selectedDate]);
 
-        return new Date(year, month, monthDay.day);
-      });
-
-    return dates;
-  }, [currentMonth, monthAvailability]);
+  const selectedWeekDay = useMemo(() => {
+    return format(selectedDate, 'cccc', { locale: ptBR });
+  }, [selectedDate]);
 
   const morningDayAvailability = useMemo(() => {
     return dayAvailability
@@ -181,7 +172,7 @@ const CreateAppointment: React.FC = () => {
         description: 'Ocorreu algum erro ao tentar criar um agendamento.'
       });
     }
-  }, [addToast, selectedProvider, selectedHour, selectedDate]);
+  }, [addToast, selectedProvider, selectedHour, selectedDate, history]);
 
   return (
     <Container>
@@ -219,6 +210,12 @@ const CreateAppointment: React.FC = () => {
       <Content>
         <Schedule>
           <Section>
+            <h1>Horários disponíveis</h1>
+            <p>
+              {isToday(selectedDate) && <span>Hoje</span>}
+              <span>{selectedDateAsText}</span>
+              <span>{selectedWeekDay}</span>
+            </p>
             <strong>Manhã</strong>
 
             {morningDayAvailability.length === 0 && (
@@ -278,30 +275,9 @@ const CreateAppointment: React.FC = () => {
         </Schedule>
 
         <Calendar>
-          <DayPicker
-            weekdaysShort={['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']}
-            fromMonth={new Date()}
-            disabledDays={[{ daysOfWeek: [0, 6] }, ...disableDays]}
-            modifiers={{
-              available: { daysOfWeek: [1, 2, 3, 4, 5] }
-            }}
-            onDayClick={handleDateChange}
-            selectedDays={selectedDate}
-            onMonthChange={handleMonthChange}
-            months={[
-              'Janeiro',
-              'Fevereiro',
-              'Março',
-              'Abril',
-              'Maio',
-              'Junho',
-              'Julho',
-              'Agosto',
-              'Setembro',
-              'Outubro',
-              'Novembro',
-              'Dezembro'
-            ]}
+          <DatePicker
+            daysOfWeek={[0, 6]}
+            availabilityMonth={monthAvailability}
           />
         </Calendar>
       </Content>
