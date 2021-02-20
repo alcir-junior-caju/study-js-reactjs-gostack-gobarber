@@ -22,7 +22,8 @@ export const Container = styled.div`
 
     div {
       margin: 0 auto;
-      max-width: 1120px;
+      max-width: 1100px;
+      padding: 0 20px;
       width: 100%;
 
       svg {

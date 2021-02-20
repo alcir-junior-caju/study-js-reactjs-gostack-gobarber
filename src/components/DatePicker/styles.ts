@@ -7,11 +7,12 @@ import ArrowRightIcon from '@assets/ArrowRightIcon.svg';
 export const Container = styled.div`
   .DayPicker {
     border-radius: 10px;
+    width: 100%;
 
     &-wrapper {
-      padding-bottom: 0;
       background: #28262e;
       border-radius: 10px;
+      padding-bottom: 0;
       z-index: 0;
     }
 
@@ -19,12 +20,12 @@ export const Container = styled.div`
       position: relative;
 
       ::before {
-        content: '';
-        width: 100%;
-        height: 50px;
-        position: absolute;
         background: #3e3b47;
         border-radius: 10px 10px 0 0;
+        content: '';
+        height: 50px;
+        position: absolute;
+        width: 100%;
         z-index: -1;
       }
     }
@@ -36,17 +37,17 @@ export const Container = styled.div`
 
       &--prev {
         background: url(${ArrowLeftIcon}) no-repeat center;
-        margin-right: 0;
-        left: 12px;
-        width: 50px;
         height: 50px;
+        left: 12px;
+        margin-right: 0;
+        width: 50px;
       }
 
       &--next {
         background: url(${ArrowRightIcon}) no-repeat center;
+        height: 50px;
         right: 12px;
         width: 50px;
-        height: 50px;
       }
     }
 
@@ -58,8 +59,8 @@ export const Container = styled.div`
     }
 
     &-Caption {
-      line-height: 50px;
       color: #f4ede8;
+      line-height: 50px;
 
       > div {
         text-align: center;
@@ -72,14 +73,14 @@ export const Container = styled.div`
     }
 
     &-Day {
-      width: 40px;
+      border-radius: 10px;
       height: 40px;
       transition: all 0.2s ease;
-      border-radius: 10px;
+      width: 40px;
 
       &--today {
-        font-weight: normal;
         color: #fff;
+        font-weight: normal;
       }
 
       &--available:not(.DayPicker-Day--outside) {
@@ -88,8 +89,8 @@ export const Container = styled.div`
       }
 
       &--disabled {
-        color: #666360;
         background: transparent !important;
+        color: #666360;
       }
 
       &--selected:not(.DayPicker-Day--disabled) {
