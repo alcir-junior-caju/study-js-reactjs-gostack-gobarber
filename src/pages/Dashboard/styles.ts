@@ -155,6 +155,10 @@ export const Appointment = styled.div`
       color: #fff;
       font-size: 20px;
       margin-left: 24px;
+
+      @media only screen and (max-width: 600px) {
+        font-size: 14px;
+      }
     }
   }
 `;

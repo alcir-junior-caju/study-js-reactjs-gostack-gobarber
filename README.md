@@ -35,11 +35,28 @@
     <img alt="Tela 03" src="_images/appointments.png" width="75%" style="margin: 15px 0" />
 </p>
 <p align="center">
-    <img alt="Tela 04" src="_images/profile.png" width="75%" style="margin: 15px 0" />
+    <img alt="Tela 04" src="_images/create-appointment.png" width="75%" style="margin: 15px 0" />
+</p>
+<p align="center">
+    <img alt="Tela 05" src="_images/profile.png" width="75%" style="margin: 15px 0" />
+</p>
+<p align="center" style="width:50%;float:left;">
+    <img alt="Tela 06" src="_images/dashboard-mobile.png" style="margin: 15px 0" />
+</p>
+<p align="center" style="width:50%;float:left;">
+    <img alt="Tela 07" src="_images/create-appointment-mobile.png" style="margin: 15px 0" />
+</p>
+<p align="center" style="width:50%;float:left;">
+    <img alt="Tela 08" src="_images/profile-mobile.png" style="margin: 15px 0" />
+</p>
+<p align="center" style="width:50%;float:left;">
+    <img alt="Tela 09" src="_images/providers-mobile.png" style="margin: 15px 0" />
 </p>
 
 ---
 
 #### Descrição
 
-Pequena aplicação frontend criada usando a Context API, consumindo a API em node, onde temos sistema de autenticação, atualização de pergil, sistema de notificação via toasts e busca nos agendamentos.
+Pequena aplicação frontend criada usando a Context API, consumindo a API em node, onde temos sistema de autenticação, atualização de perfil, sistema de notificação via toasts e busca nos agendamentos.
+
+Como optei por não desenvolver o app passei as funcionalidades do app para web.
