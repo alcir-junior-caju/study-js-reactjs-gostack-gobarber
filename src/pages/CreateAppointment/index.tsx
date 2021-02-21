@@ -6,7 +6,7 @@ import React, {
   useState
 } from 'react';
 import { FiArrowLeft, FiArrowRight, FiUser } from 'react-icons/fi';
-import { useRouteMatch, useHistory } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 
 import { isToday, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -20,6 +20,8 @@ import 'react-day-picker/lib/style.css';
 
 import DatePicker from '@components/DatePicker';
 import Header from '@components/Header';
+
+import checkImageFaker from '@utils/checkImageFaker';
 
 import {
   Container,
@@ -39,6 +41,7 @@ interface Provider {
   id: string;
   name: string;
   avatarUrl: string;
+  avatar: string;
 }
 
 interface RepositoryParams {
@@ -58,7 +61,6 @@ interface DayAvailability {
 const CreateAppointment: React.FC = () => {
   const { addToast } = useToast();
   const { selectedDate, setSelectedDate, currentMonth } = useDatePicker();
-  const history = useHistory();
   const providerListRef = useRef<HTMLDivElement>(null);
   const { params } = useRouteMatch<RepositoryParams>();
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -162,8 +164,6 @@ const CreateAppointment: React.FC = () => {
         date
       });
 
-      history.push('/');
-
       addToast({
         type: 'success',
         title: 'Agendamento criado',
@@ -176,7 +176,7 @@ const CreateAppointment: React.FC = () => {
         description: 'Ocorreu algum erro ao tentar criar um agendamento.'
       });
     }
-  }, [addToast, selectedProvider, selectedHour, selectedDate, history]);
+  }, [addToast, selectedProvider, selectedHour, selectedDate]);
 
   return (
     <Container>
@@ -186,7 +186,8 @@ const CreateAppointment: React.FC = () => {
         <FiArrowLeft onClick={() => handleHorizontalScroll(-150)} />
 
         <ProviderList ref={providerListRef}>
-          {providers.map(({ id, name, avatarUrl }) => {
+          {providers.map(({ id, name, avatarUrl, avatar }) => {
+            const getAvatar = checkImageFaker({ id, avatarUrl, avatar });
             const isChecked = selectedProvider === id;
 
             return (
@@ -196,8 +197,8 @@ const CreateAppointment: React.FC = () => {
                 selectedprovider={Number(!!isChecked)}
                 onClick={() => handleSelectProvider(id)}
               >
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt={name} />
+                {getAvatar ? (
+                  <img src={getAvatar.toString()} alt={name} />
                 ) : (
                   <FiUser size={30} />
                 )}

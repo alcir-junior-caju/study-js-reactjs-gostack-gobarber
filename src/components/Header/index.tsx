@@ -6,15 +6,18 @@ import { useAuth } from '@hooks/auth';
 
 import logo from '@assets/logo.svg';
 
+import checkImageFaker from '@utils/checkImageFaker';
+
 import { Container, HeaderContent, Profile, Menu } from './styles';
 
 const Header: React.FC = () => {
   const {
     signOut,
-    user: { name, avatarUrl }
+    user: { name, avatarUrl, avatar, id }
   } = useAuth();
   const history = useHistory();
   const location = useLocation();
+  const getAvatar = checkImageFaker({ avatarUrl, avatar, id });
 
   return (
     <Container>
@@ -37,8 +40,8 @@ const Header: React.FC = () => {
         </Menu>
 
         <Profile>
-          {avatarUrl ? (
-            <img src={avatarUrl} alt={name} />
+          {getAvatar ? (
+            <img src={getAvatar.toString()} alt={name} />
           ) : (
             <FiUser size={30} />
           )}

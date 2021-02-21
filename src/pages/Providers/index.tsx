@@ -5,12 +5,15 @@ import api from '@services/api';
 
 import Header from '@components/Header';
 
+import checkImageFaker from '@utils/checkImageFaker';
+
 import { Container, Content, List } from './styles';
 
 interface Provider {
   id: string;
   name: string;
   avatarUrl: string;
+  avatar: string;
 }
 
 const Providers: React.FC = () => {
@@ -25,27 +28,31 @@ const Providers: React.FC = () => {
       <Header />
       <h1>Barbeiros</h1>
       <Content>
-        {providers.map(({ id, name, avatarUrl }) => (
-          <List to={`/create-appointment/${id}`} key={id}>
-            {avatarUrl ? (
-              <img src={avatarUrl} alt={name} />
-            ) : (
-              <FiUser size={30} />
-            )}
+        {providers.map(({ id, name, avatarUrl, avatar }) => {
+          const getAvatar = checkImageFaker({ id, avatarUrl, avatar });
 
-            <div>
-              <strong>{name}</strong>
-              <span>
-                <FiCalendar />
-                Segunda à sexta
-              </span>
-              <span>
-                <FiClock />
-                8h às 18h
-              </span>
-            </div>
-          </List>
-        ))}
+          return (
+            <List to={`/create-appointment/${id}`} key={id}>
+              {getAvatar ? (
+                <img src={getAvatar.toString()} alt={name} />
+              ) : (
+                <FiUser size={30} />
+              )}
+
+              <div>
+                <strong>{name}</strong>
+                <span>
+                  <FiCalendar />
+                  Segunda à sexta
+                </span>
+                <span>
+                  <FiClock />
+                  8h às 18h
+                </span>
+              </div>
+            </List>
+          );
+        })}
       </Content>
     </Container>
   );

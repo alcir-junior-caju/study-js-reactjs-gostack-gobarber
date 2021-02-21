@@ -13,6 +13,8 @@ import { useDatePicker } from '@hooks/datePicker';
 import DatePicker from '@components/DatePicker';
 import Header from '@components/Header';
 
+import checkImageFaker from '@utils/checkImageFaker';
+
 import {
   Container,
   Content,
@@ -33,8 +35,10 @@ interface Appointment {
   date: string;
   hourFormatted: string;
   user: {
+    id: string;
     name: string;
     avatarUrl: string;
+    avatar: string;
   };
 }
 
@@ -130,7 +134,11 @@ const Dashboard: React.FC = () => {
               <div>
                 {nextAppointment.user.avatarUrl ? (
                   <img
-                    src={nextAppointment.user.avatarUrl}
+                    src={checkImageFaker({
+                      id: nextAppointment.user.id,
+                      avatarUrl: nextAppointment.user.avatarUrl,
+                      avatar: nextAppointment.user.avatar
+                    }).toString()}
                     alt={nextAppointment.user.name}
                   />
                 ) : (
@@ -154,7 +162,11 @@ const Dashboard: React.FC = () => {
             )}
 
             {morningAppointments.map(
-              ({ id, hourFormatted, user: { avatarUrl, name } }) => (
+              ({
+                id,
+                hourFormatted,
+                user: { avatarUrl, name, id: userId, avatar }
+              }) => (
                 <Appointment key={id}>
                   <span>
                     <FiClock size={20} />
@@ -163,7 +175,14 @@ const Dashboard: React.FC = () => {
 
                   <div>
                     {avatarUrl ? (
-                      <img src={avatarUrl} alt={name} />
+                      <img
+                        src={checkImageFaker({
+                          id: userId,
+                          avatarUrl,
+                          avatar
+                        }).toString()}
+                        alt={name}
+                      />
                     ) : (
                       <FiUser size={25} />
                     )}
@@ -182,7 +201,11 @@ const Dashboard: React.FC = () => {
             )}
 
             {afternoonAppointments.map(
-              ({ id, hourFormatted, user: { avatarUrl, name } }) => (
+              ({
+                id,
+                hourFormatted,
+                user: { avatarUrl, name, id: userId, avatar }
+              }) => (
                 <Appointment key={id}>
                   <span>
                     <FiClock size={20} />
@@ -191,7 +214,14 @@ const Dashboard: React.FC = () => {
 
                   <div>
                     {avatarUrl ? (
-                      <img src={avatarUrl} alt={name} />
+                      <img
+                        src={checkImageFaker({
+                          id: userId,
+                          avatarUrl,
+                          avatar
+                        }).toString()}
+                        alt={name}
+                      />
                     ) : (
                       <FiUser size={25} />
                     )}
