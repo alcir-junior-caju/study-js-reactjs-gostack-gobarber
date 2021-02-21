@@ -58,9 +58,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
     [setSelectedDate]
   );
 
-  const handleMonthChange = useCallback((month: Date) => {
-    setCurrentMounth(month);
-  }, []);
+  const handleMonthChange = useCallback(
+    (month: Date) => {
+      setCurrentMounth(month);
+    },
+    [setCurrentMounth]
+  );
 
   const disableDays = useMemo(() => {
     const dates = monthAvailability
