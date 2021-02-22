@@ -65,6 +65,14 @@
 
 ---
 
+#### Visualizar o projeto na IDE:
+
+Para quem quiser visualizar o projeto na IDE esse recurso do GitHub é bem bacana:
+
+https://github1s.com/alcir-junior-caju/study-js-reactjs-gostack-gobarber
+
+---
+
 #### Descrição
 
 Pequena aplicação frontend criada usando a Context API, consumindo a API em node, onde temos sistema de autenticação, atualização de perfil, sistema de notificação via toasts e busca nos agendamentos.
